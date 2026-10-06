@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="libs/tesseract.min.js"></script>
+</head>
+<body>
+  <h1>E2E Verification</h1>
+  <div id="output">Running...</div>
+  <script src="js/app.js?v=10"></script>
+  <script>
+    async function test() {
+      const out = document.getElementById('output');
+      try {
+        const response = await fetch('/test_media.png');
+        const blob = await response.blob();
+        const res = await recognizeVietnamese(blob);
+        out.innerText = JSON.stringify(res, null, 2);
+        await fetch('/api/verify-result', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(res)
+        });
+      } catch (e) {
+        out.innerText = "Error: " + e.message;
+        await fetch('/api/verify-result', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({error: e.message})
+        });
+      }
+    }
+    window.addEventListener('load', test);
+  </script>
+</body>
+</html>

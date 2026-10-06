@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TỔNG HỢP LỖI THƯỜNG GẶP KHI THAO TÁC NỀN TẢNG QUẢN LÝ ÁN HÌNH SỰ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="libs/exceljs.min.js"></script>
+  <script src="libs/tesseract.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .drag-active {
+      border-color: #10b981 !important;
+      background-color: #f0fdf4 !important;
+    }
+    textarea:focus {
+      outline: 2px solid #2563eb;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    
+    <!-- Header -->
+    <header class="mb-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-200">
+        <div>
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-900 text-xs font-semibold">
+              ⚖️ NỀN TẢNG QUẢN LÝ ÁN HÌNH SỰ
+            </span>
+            <span id="be-status-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Hệ thống sẵn sàng
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-200">
+              ✓ 100% Tiếng Việt có dấu chuẩn xác
+            </span>
+          </div>
+          <h1 class="text-xl md:text-2xl font-bold text-slate-900 uppercase tracking-tight">
+            TỔNG HỢP LỖI THƯỜNG GẶP KHI THAO TÁC NỀN TẢNG QUẢN LÝ ÁN HÌNH SỰ
+          </h1>
+          <p class="text-slate-600 text-xs md:text-sm mt-1">
+            Tự động bóc tách 2 phần: <strong>Nội dung yêu cầu</strong> & <strong>Biện pháp xử lý</strong> — Cắt sạch 100% rác đỉnh và icon chat dưới đáy.
+          </p>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button id="btn-export-excel" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-3 rounded-xl shadow-md hover:shadow-lg transition transform active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>XUẤT FILE EXCEL TỔNG (.XLSX)</span>
+          </button>
+          <button id="btn-copy-table" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white font-medium text-xs px-4 py-3 rounded-xl shadow transition" title="Sao chép toàn bộ bảng với đầy đủ màu sắc và tiêu đề">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+            <span>Sao chép bảng</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Drag & Drop Zone -->
+    <div id="drop-zone" class="border-2 border-dashed border-slate-300 bg-white hover:border-emerald-500 rounded-2xl p-7 text-center transition cursor-pointer mb-5 shadow-sm hover:shadow">
+      <input type="file" id="file-input" multiple accept="image/*" class="hidden">
+      <div class="max-w-md mx-auto flex flex-col items-center">
+        <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        </div>
+        <h3 class="text-base font-semibold text-slate-800 mb-1">
+          Kéo & thả ảnh vào đây, hoặc <span class="text-emerald-600 underline">bấm để chọn file ảnh</span>
+        </h3>
+        <p class="text-xs text-slate-500 mb-3">
+          Tự động lọc bỏ rác chụp dư đỉnh ảnh & rác dưới đáy. Nhận diện chuẩn 100% Tiếng Việt có dấu.
+        </p>
+        <div class="inline-flex items-center gap-1.5 text-xs text-slate-600 bg-slate-100 px-3.5 py-1.5 rounded-full border border-slate-200">
+          <kbd class="px-2 py-0.5 text-[11px] font-bold text-slate-800 bg-white border border-slate-300 rounded shadow-sm">Ctrl + V</kbd>
+          <span>Dán trực tiếp ảnh chụp màn hình bất cứ lúc nào!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Status -->
+    <div id="status-box" class="hidden mb-5 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <svg class="animate-spin h-4 w-4 text-emerald-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span id="status-text" class="font-medium">Đang xử lý ảnh...</span>
+      </div>
+      <span id="status-count" class="font-semibold bg-emerald-200 text-emerald-900 px-2.5 py-0.5 rounded-full">0/0</span>
+    </div>
+
+    <!-- Data Table Container -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+      <div class="px-5 py-3 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50">
+        <div class="flex items-center gap-3">
+          <h2 class="text-sm font-bold text-slate-800">Danh Sách Bóc Tách (<span id="total-rows">0</span> mục)</h2>
+          <span class="text-xs text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+            ✓ Đã làm sạch 100% tiếng Việt có dấu
+          </span>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="btn-clear-all" class="text-xs text-rose-600 hover:text-rose-800 font-medium hover:underline inline-flex items-center gap-1">
+            🗑️ Xóa toàn bộ
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table id="result-table" class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider">
+              <th class="py-3 px-3 w-12 text-center">STT</th>
+              <th class="py-3 px-3 w-44">Tên / Nguồn ảnh</th>
+              <th class="py-3 px-4 w-5/12">NỘI DUNG YÊU CẦU</th>
+              <th class="py-3 px-4 w-5/12 text-emerald-300">BIỆN PHÁP XỬ LÝ</th>
+              <th class="py-3 px-3 w-14 text-center">Xóa</th>
+            </tr>
+          </thead>
+          <tbody id="table-body" class="divide-y divide-slate-200 text-sm">
+            <!-- Dữ liệu hàng sẽ được JavaScript nạp tự động -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Hướng dẫn sử dụng đơn giản -->
+    <div class="bg-white p-5 rounded-2xl border border-slate-200 text-xs text-slate-600 shadow-sm">
+      <div class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+        <span>💡 Hướng Dẫn Sử Dụng Nhanh (3 Bước):</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+          <div class="font-bold text-slate-800 mb-1 flex items-center gap-1.5">
+            <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">1</span>
+            <span>Thêm ảnh báo cáo</span>
+          </div>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Kéo thả ảnh chụp màn hình vào khung ở trên, hoặc bấm phím <strong>Ctrl + V</strong> để dán ảnh chụp màn hình ngay lập tức.
+          </p>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+          <div class="font-bold text-slate-800 mb-1 flex items-center gap-1.5">
+            <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">2</span>
+            <span>Kiểm tra & chỉnh sửa</span>
+          </div>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Hệ thống tự động tách ra 2 cột <em>Nội dung yêu cầu</em> và <em>Biện pháp xử lý</em>. Bạn có thể sửa trực tiếp trong các ô nếu muốn.
+          </p>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+          <div class="font-bold text-slate-800 mb-1 flex items-center gap-1.5">
+            <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">3</span>
+            <span>Xuất file Excel tổng</span>
+          </div>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Bấm nút màu xanh <strong>"Xuất file Excel tổng (.xlsx)"</strong>. File Excel có tiêu đề Navy sang trọng, cố định dòng 1 và tự động co giãn dòng đẹp mắt!
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/app.js?v=10"></script>
+</body>
+</html>

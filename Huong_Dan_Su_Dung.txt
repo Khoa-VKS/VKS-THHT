@@ -1,0 +1,41 @@
+================================================================================
+          HƯỚNG DẪN SỬ DỤNG CÔNG CỤ TÁCH ẢNH BÁO CÁO & XUẤT EXCEL
+================================================================================
+
+1. GIỚI THIỆU:
+   Công cụ hỗ trợ bóc tách tự động các ảnh chụp màn hình báo cáo "Diễn biến xử lý",
+   tách thành 2 cột:
+   - Cột 1: NỘI DUNG YÊU CẦU
+   - Cột 2: BIỆN PHÁP XỬ LÝ
+   Và tổng hợp toàn bộ các ảnh thành 1 file Excel (.xlsx) chuẩn chỉnh.
+
+--------------------------------------------------------------------------------
+2. CÁCH SỬ DỤNG TIỆN LỢI NHẤT (BẢN WEB APP TRÌNH DUYỆT):
+   - Mở file "index.html" (hoặc click đúp file "chay_ung_dung.bat" chọn số 1).
+   - Kéo và thả 1 hoặc NHIỀU file ảnh vào khung.
+   - HOẶC: Chụp ảnh màn hình (Windows + Shift + S) rồi quay sang trình duyệt bấm Ctrl + V.
+   - Bảng kết quả sẽ tự động hiện ra 2 cột rõ ràng.
+   - Bạn có thể chỉnh sửa trực tiếp nội dung từng ô nếu muốn.
+   - Bấm nút "Xuất file Excel (.xlsx)" để tải file Excel về.
+   - Hoặc bấm "Sao chép bảng" để dán trực tiếp vào file Word / Excel có sẵn.
+
+--------------------------------------------------------------------------------
+3. CÁCH SỬ DỤNG BẢN WINDOWS DESKTOP (APP_GUI):
+   - Click đúp file "chay_ung_dung.bat" chọn số 2 (hoặc chạy "python app_gui.py").
+   - Bấm nút "Chọn File Ảnh..." hoặc "Chọn Thư Mục Ảnh...".
+   - Bấm "Bắt Đầu Bóc Tách".
+   - Bấm "Xuất File Excel (.xlsx)".
+
+--------------------------------------------------------------------------------
+4. XỬ LÝ HÀNG LOẠT THEO THƯ MỤC:
+   - Copy toàn bộ các ảnh chụp màn hình vào thư mục: "input_images"
+   - Click đúp file "chay_ung_dung.bat" chọn số 3 (hoặc chạy "python batch_process.py")
+   - Toàn bộ kết quả sẽ được tự động tổng hợp vào file: "Ket_Qua_Tong_Hop.xlsx"
+
+--------------------------------------------------------------------------------
+5. ĐỘ CHÍNH XÁC CAO NHẤT (TIẾNG VIỆT 100% CÓ DẤU CHUẨN):
+   - Bạn nên lấy 1 Gemini API Key hoàn toàn MIỄN PHÍ tại:
+     https://aistudio.google.com/app/apikey
+   - Nhập key vào ô trên giao diện Web hoặc Desktop (chỉ cần nhập 1 lần duy nhất).
+   - Gemini Vision AI sẽ đọc chuẩn 100% dấu tiếng Việt, số điều luật, phân loại rõ ràng.
+================================================================================
